@@ -16,11 +16,16 @@
 // Utilities
 //   Staging
 
+set tVal to 0.
+lock throttle to tVal.
+set sVal to "KILL".
+LOCK Steering to sVal.
 
 //Launch Operations
 function doCountDown
 {
-  //HUD_init().
+  parameter mission.
+  HUD_init().
   set Count to 10.
   until Count = 0
   {
@@ -31,30 +36,31 @@ function doCountDown
   set tVal to 1.
   set sVal to heading(90,90).
   stage.
+  mission["next"]().
 }
 
 FUNCTION doAscent
 {
+  parameter mission.
   // if body:atm:exists {until alt:radar > 1000 or ship:verticalspeed > 100 {wait 0. }}
   set sVal to heading(LAZcalc(LaunchData),max(round(90 - (90 * ((floor(altitude) * 100) / (TurnEnd)) / 100)),0)).
   set Tval to min((1-ship:q),max(0.5, ship:mass * (MaxG * CONSTANT:g0()) / ship:AvailableThrust)).
-  if alt:apoapsis >= orbAlt {set tVal to 0. wait 1. }
-  wait 0.
+  if alt:apoapsis >= orbAlt {set tVal to 0. wait 1. mission["next"]().}
 }
 
 function doCoast
 {
+  parameter mission.
   set tVal to 0.
   wait until alt:radar >= body:atm:height.
   panels on.
   if alt:radar >= (body:atm:height + 500) {warpto(time:seconds + (eta:apoapsis-30)).}
-  if kuniverse:timewarp:issettled() {set sVal to heading(LAZcalc(LaunchData),0). }
-  wait 0.
+  if kuniverse:timewarp:issettled() {set sVal to heading(LAZcalc(LaunchData),0). mission["next"]().}
 }
 
 function doCircularize
 {
-
+  parameter mission.
   until ship:obt:eccentricity <= 0.001
   {
     if eta:apoapsis >=45 {set tVal to 0.}
@@ -65,14 +71,13 @@ function doCircularize
       set tVal to circErr.
     }
   }
-  set tVal to 0. wait 1.
-  wait 0.
+  set tVal to 0. wait 1. mission["next"]().
 }
 
 //Mission Functions
 function doResonantOrbit1 //Params Target AP, Resonant Fraction (Decimal)
 {
-
+  parameter mission.
   LOCK Steering to sVal.
   //Raise AP to Target AP
   set sVal to prograde.
@@ -87,11 +92,11 @@ function doResonantOrbit1 //Params Target AP, Resonant Fraction (Decimal)
   }
   set tVal to 0.
   wait 1.
-  wait 0.
+  mission["next"]().
 }
 function doResonantOrbit2
 {
-
+  parameter mission.
   LOCK Steering to sVal.
   set sVal to prograde.
   //Increase Orbital Period to Resonant Period
@@ -106,12 +111,12 @@ function doResonantOrbit2
   }
   set tVal to 0.
   wait 0.
-
+  mission["next"]().
 }
 
 function doDeploy
 {
-
+  parameter mission.
   local srel is 0.
   until ship:partstagged("SAT"):length = 0
   {
@@ -131,8 +136,7 @@ function doDeploy
     }
     if ETA:periapsis > ETA:apoapsis set Srel to 0.
   }
-  if ship:partstagged("SAT"):length = 0 and not Srel {}
-  wait 0.
+  if ship:partstagged("SAT"):length = 0 and not Srel {mission["next"]().}
 }
 
 
@@ -149,20 +153,20 @@ function doDocking
 //post Mission
 function doDeOrbit
 {
-
+  parameter mission.
   set sVal to retrograde.
   until alt:periapsis <= 0 set tVal to 1.
-
+  mission["terminate"]().
 }
 
 //Utilities
 function doStaging
 {
-
+  parameter mission.
   list engines in eList.
   for eng in eList
   {
-    if ship:AvailableThrust < 1 or (eng:flameout and eng:ignition)
+    if ship:AvailableThrust < 1 or eng:flameout
     {
       WAIT 1.
       stage.
@@ -174,7 +178,7 @@ function doStaging
 
 function doFaringDeploy
 {
-
+  parameter mission.
   if (alt:radar >= orbAlt*0.9 OR alt:radar >= body:atm:height) and ship:partsdubbed("PLF"):length >0
   {
     ship:partsdubbed("PLF")[0]:getmodule("ModuleProceduralFairing"):doaction("Deploy",true).

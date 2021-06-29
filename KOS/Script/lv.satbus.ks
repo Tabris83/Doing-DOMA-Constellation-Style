@@ -36,36 +36,43 @@ if missionparams <> ""
   set OrbInc to missionparams:split(",")[1]:toscalar.
   set MaxG to missionparams:split(",")[2]:toscalar.
   set Sats to ship:partstagged("SAT"):length.
-  if Sats > 0 {set resFraction to round((sats-1)/Sats,2).} else {set resFraction to 1.}
+  if Sats > 0 {set resFraction to 1 + round(1/Sats,2).} else {set resFraction to 1.}
 }
 
-if body:atm:exists{set OrbAlt to body:atm:height + 35000. set TurnEnd to body:atm:height * 0.5.}
+if body:atm:exists{set OrbAlt to body:atm:height + 35000. set TurnEnd to body:atm:height * 0.7.}
 else{set OrbAlt to 35000. set TurnEnd to OrbAlt * 0.5.}
 
 set LaunchData to LAZcalc_init(OrbAlt,OrbInc).
+set runmode to -1.
+//Initial Startup Functions
 HUD_init().
+HUD_print().
 TagCores().
+Sat_Update().
 //setup throttle and steering locks.
 set tVal to 0.
 lock throttle to tVal.
 set sVal to "KILL".
 LOCK Steering to sVal.
+set done to false.
 // Main Program
 
-set Main_Seq to List(
-  "Terminal Count  ", doCountDown@,
-  "Ascent          ", doAscent@,
-  "Coast Phase     ", doCoast@,
-  "Circularization ", doCircularize@,
-  "Setting ResOrbit", doResonantOrbit@,
-  "Deploying Sats  ", doDeploy@,
-  "De-Orbiting     ", doDeOrbit@
-).
-
-set events to lex(
-  "Staging", doStaging@,
-  "Hud Print", HUD_print@,
-  "Sat Dep", HUD_SatDep@
-).
-
-run_mission(Main_Seq, events).
+// set Main_Seq to List(
+//   "Terminal Count  ", doCountDown@,
+//   "Ascent          ", doAscent@,
+//   "Coast Phase     ", doCoast@,
+//   "Circularization ", doCircularize@,
+//   "Setting ResOrbit", doResonantOrbit1@,
+//   "Setting ResOrbit", doResonantOrbit2@,
+//   "Deploying Sats  ", doDeploy@,
+//   "De-Orbiting     ", doDeOrbit@
+// ).
+//
+// set events to lex(
+//   "Staging", doStaging@,
+//   "Faring", doFaringDeploy@,
+//   "Hud Print", HUD_print@,
+//   //"Debug", HUD_Debug@,
+//   "Sat Dep", HUD_SatDep@
+// ).
+// run_mission(Main_Seq, events).

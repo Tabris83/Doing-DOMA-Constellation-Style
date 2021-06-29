@@ -7,8 +7,10 @@ declare FUNCTION NOTIFY {
 
 function set_runmode // write runmode to probe core part tag
 {
-  parameter n. set runmode to n.
-  set ship:rootpart:tag to n:tostring.
+  parameter RM, RC.
+  set runmode to RM.
+  Set RunCode to RC.
+  set ship:rootpart:tag to RM:tostring + "," + RC:tostring.
 }
 
 // function Staging
@@ -70,8 +72,6 @@ declare function exec_node
   remove nd.
   SET SHIP:CONTROL:PILOTMAINTHROTTLE TO 0.
 }
-
-
 
 function AV_switch
 {

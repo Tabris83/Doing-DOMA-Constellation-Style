@@ -15,11 +15,12 @@ for c in corelst{set c:tag to ship:name.}
 }
 
 function Sat_Update
-{set sat_Vol to list(). list volumes in volumes. for v in volumes {sat_Vol:add(v).}
+{
+  set sat_Vol to list(). list volumes in volumes. for v in volumes {sat_Vol:add(v).}
   sat_Vol:remove(sat_Vol:find(core:volume)). sat_Vol:remove(0).
   set SV_It to sat_Vol:iterator.
   until Not SV_It:NEXT{deletepath((SV_It:index + 2) + ":/boot"). copypath("0:/boot/sat.boot.ks", (SV_It:index + 2) + ":/boot/sat.boot.ks").}
-  runpath("0:/remote_reboot.ks").
+  SleepCores(). wait 1. SleepCores().
 }
 
 function update_Sat_name

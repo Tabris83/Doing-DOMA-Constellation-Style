@@ -14,22 +14,22 @@ function HUD_init
 
 function HUD_print
 {
+  parameter mission.
   //Col1 1, col2 20, col3 34
   //Static information
-  print "Ship Name: " + shipname at (1,1).
-  print "MET: " + MET(Missiontime) at (20,2). print "Mode: " + OpCode at (34,2).
+  print "Ship Name: " + shipname at (1,1). print "MET: " + MET(Missiontime) at (20,1). print mission["runmode"]() at (34,1).
   //Initial Orbital Params
+  print "Target Ap: " + round(orbAlt/1000) + "km   " at (1,2).
   print "Current Alt: " + round(alt:radar/1000,2) at (1,3).
   print "Current AP: " + round(alt:apoapsis/1000,2) + "km   " at (1,4).
-  print "AP ETA: " + MET(eta:apoapsis) + "    " at (25,4).
   print "Current PE: " + round(alt:periapsis/1000,2) + "km   " at (1,5).
-  print "PE ETA: " + MET(eta:periapsis) + "    " at (25,5).
   wait 0.
 }
 
 //Debug
-function HUD_Debug_steering
+function HUD_Debug
 {
+  parameter mission.
   print "Debug Info" at (0,11).
   print "throttle: " + throttle at (0,12).
   print "Steering Enabled: " + steeringmanager:enabled at (0,13).
@@ -39,28 +39,18 @@ function HUD_Debug_steering
   print "prograde " + prograde at (0,17).
   set steeringmanager:showfacingvectors to true.
 }
-
-function HUD_Debug
-{
-  print "Warp to AP: " + MET(time:seconds + (eta:apoapsis-30)) at (0,11).
-  print "Warp to PE: " + MET(time:seconds + (eta:periapsis-30)) at (0,12).
-  if defined circErr Print "Circularization Throttle: " + circErr at (0,13).
-  if defined apErr Print "ResOrb burn1 Throttle: " + apErr at (0,14).
-  if defined resErr Print "ResOrb burn2 Throttle: " + resErr at (0,15).
-}
 //Mission HUD Modules
 function HUD_SatDep
 {
+  parameter mission.
   print "Target AP: " + round(TarAP/1000,2) + "km   " at (1,7).
   print "Resonant Fraction: " + resFraction at (1,8).
   print "Target Period: " + MET(OrbPeratAlt(TarAP)) at (25,7).
   Print "Res Period: " + MET(OrbPeratAlt(TarAP)*resFraction) at (25,8).
-  print "Sats Left: " + ship:partstagged("SAT"):length at (1,9).
+  print "Sats Left: " + Sats at (1,9).
   wait 0.
 }
 
-
-//HUD Helper Functions
 declare function MET //Time formated
 {
   //JNSQ settings
