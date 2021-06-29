@@ -1,0 +1,20 @@
+Body{
+  background-image: image(/assets/Images/BG.space.jpg);
+  background-color: grey;
+}
+H1{
+  background-color: Darkgrey;
+  font-weight: bold;
+  text-shadow: #000 3px 0 10px;
+  color: #BAD455;
+}
+A{
+  font-weight: bold;
+}
+
+ol{
+  background-color: Lightblue;
+}
+Div{
+  background-color: lightgreen;
+}

@@ -12,4 +12,5 @@ Template for Adding New Craft
 ## KSP version
 Info about Craft
 
-link to craft file
+[link to craft file - Github]()<br>
+[link to craft file - KerbalX]()
