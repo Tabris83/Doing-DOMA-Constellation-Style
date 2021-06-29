@@ -1,5 +1,5 @@
 Body{
-  background-image: image(/assets/Images/BG.space.jpg);
+  background-image: image("assets/Images/BG.space.jpg");
   background-color: grey;
 }
 H1{
