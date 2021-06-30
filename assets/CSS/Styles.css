@@ -1,8 +1,8 @@
 Body{
-  background-image: image("assets/Images/BG.space.jpg");
-  background-color: grey;
+  background-image: url("../images/bg.space.jpg");
 }
 H1{
+  text-align: center;
   background-color: Darkgrey;
   font-weight: bold;
   text-shadow: #000 3px 0 10px;
@@ -16,5 +16,5 @@ ol{
   background-color: Lightblue;
 }
 Div{
-  background-color: lightgreen;
+  background-color: #BAD455;
 }
