@@ -1,0 +1,26 @@
+Body{
+  /* background-image: url("../images/bg.space.jpg"); */
+  background-color: black;
+}
+H1{
+  text-align: center;
+  background-color: Darkgrey;
+  font-weight: bold;
+  text-shadow: #000 3px 0 10px;
+  color: #BAD455;
+}
+A{
+  font-weight: bold;
+}
+
+ol{
+  background-color: Lightblue;
+}
+Div{
+  color: white;
+  background-color: #BAD455;
+}
+img{
+  width: 512px;
+  height: 256px;
+}
